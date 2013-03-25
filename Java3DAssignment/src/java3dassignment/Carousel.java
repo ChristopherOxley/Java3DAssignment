@@ -8,8 +8,11 @@ import com.sun.j3d.utils.geometry.Cylinder;
 import com.sun.j3d.utils.geometry.Primitive;
 import javax.media.j3d.Appearance;
 import javax.media.j3d.Material;
+import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.vecmath.Color3f;
+import javax.vecmath.Vector3d;
+import javax.vecmath.Vector3f;
 
 /**
  *
@@ -24,10 +27,43 @@ public class Carousel {
         TransformGroup carouselTG = new TransformGroup();
 
 
+        TransformGroup tg_bottom = new TransformGroup();
+        Cylinder platform = Carousel.createDisc(4, 0.5f);
+        tg_bottom.addChild(platform);
+        carouselTG.addChild(tg_bottom);
+        
+        TransformGroup tg_top = new TransformGroup();
+        Cylinder roof = Carousel.createDisc(4, 1);
+        tg_top.addChild(roof);
+        carouselTG.addChild(tg_top);
 
-        // Top of carousel
-        float radius = 2.0f;
-        float height = 0.3f;
+        
+        // Move top up
+        
+        
+        Vector3f translate = new Vector3f();
+	Transform3D T3D = new Transform3D();
+	translate.set( 0.0f, 5.0f, 0.0f);
+        T3D.setTranslation(translate);
+	tg_top.setTransform(T3D);
+        
+       
+        
+        
+        
+        
+        
+        
+        
+        return carouselTG;
+    }
+    
+    
+    private static Cylinder createDisc(float radius, float height){
+        
+        
+                // Top of carousel
+
         int xDivision = 10000;
         int yDivision = 1;
 
@@ -50,13 +86,8 @@ public class Carousel {
         
         Cylinder top = new Cylinder(radius, height, Cylinder.GENERATE_NORMALS, xDivision, yDivision, topApp);
 
-
-
+        return top;
         
-        carouselTG.addChild(top);
-        
-        return carouselTG;
-        
-
     }
+    
 }
