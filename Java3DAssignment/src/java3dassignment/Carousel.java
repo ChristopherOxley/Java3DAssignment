@@ -27,10 +27,9 @@ public class Carousel {
 
         // Top of carousel
         float radius = 2.0f;
-        float height = 1.0f;
-        int primFlags = Primitive.ENABLE_APPEARANCE_MODIFY;
-        int xDivision = 10;
-        int yDivision = 10;
+        float height = 0.3f;
+        int xDivision = 10000;
+        int yDivision = 1;
 
         
         Appearance topApp = new Appearance();
@@ -46,9 +45,14 @@ public class Carousel {
         topApp.setMaterial(mat);
 
 
-        Cylinder top = new Cylinder();
-        top.setAppearance(topApp);
+      //  Cylinder top = new Cylinder();
+        
+        
+        Cylinder top = new Cylinder(radius, height, Cylinder.GENERATE_NORMALS, xDivision, yDivision, topApp);
 
+
+
+        
         carouselTG.addChild(top);
         
         return carouselTG;
