@@ -31,6 +31,29 @@ class ThemePark extends JApplet {
 
         TransformGroup carousel = Carousel.createCarousel();
 
+        
+        // Add a floor
+        TextureLoader loader = new TextureLoader("./src/java3dassignment/grass.jpg", "LUMINANCE", new Container());
+        Texture texture = loader.getTexture();
+        texture.setBoundaryModeS(Texture.WRAP);
+        texture.setBoundaryModeT(Texture.WRAP);
+        TextureAttributes texAttr = new TextureAttributes();
+        texAttr.setTextureMode(TextureAttributes.MODULATE);
+        Appearance floorAppearance = new Appearance();
+        floorAppearance.setTexture(texture);
+        floorAppearance.setTextureAttributes(texAttr);
+        
+
+
+
+        Cylinder floor = new Cylinder(200, 0.0000f, Cylinder.GENERATE_NORMALS+ Cylinder.GENERATE_TEXTURE_COORDS, floorAppearance);
+        floor.setAppearance(floorAppearance);
+        
+        
+        mainTG.addChild(floor);
+        
+        
+        
         mainTG.addChild(carousel);
 
         return mainTG;
@@ -42,9 +65,9 @@ class ThemePark extends JApplet {
         BranchGroup objRoot = new BranchGroup();
 
         // Set up the global lights
-        Color3f lColor1 = new Color3f(0.7f, 0.7f, 0.7f);
+        Color3f lColor1 = new Color3f(0.9f, 0.9f, 0.6f);
         Vector3f lDir1 = new Vector3f(-1.0f, -1.0f, -1.0f);
-        Color3f alColor = new Color3f(1.0f, 1.0f, 1.0f);
+        Color3f alColor = new Color3f(0.9f, 0.9f, 0.6f);
 
 
         AmbientLight aLgt = new AmbientLight(alColor);

@@ -6,11 +6,16 @@ package java3dassignment;
 
 import com.sun.j3d.utils.geometry.Cylinder;
 import com.sun.j3d.utils.geometry.Primitive;
+import com.sun.j3d.utils.image.TextureLoader;
+import java.awt.Container;
 import javax.media.j3d.Appearance;
 import javax.media.j3d.Material;
+import javax.media.j3d.Texture;
+import javax.media.j3d.TextureAttributes;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.vecmath.Color3f;
+import javax.vecmath.Color4f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
@@ -78,13 +83,31 @@ public class Carousel {
         mat.setDiffuseColor(new Color3f( 255.0f / 255.0f, 225.0f/ 255.0f, 0.0f/ 255.0f));
         mat.setSpecularColor(new Color3f( 255.0f / 255.0f, 195.0f/ 255.0f, 0.0f/ 255.0f));
 
-        topApp.setMaterial(mat);
+        
+        TextureLoader loader = new TextureLoader("./src/java3dassignment/MetallicPaint.jpg", "LUMINANCE", new Container());
 
+        Texture texture = loader.getTexture();
+
+        texture.setBoundaryModeS(Texture.WRAP);
+
+        texture.setBoundaryModeT(Texture.WRAP);
+
+       // texture.setBoundaryColor( new Color4f( 0.0f, 1.0f, 0.0f, 0.0f ) );
+        
+        TextureAttributes texAttr = new TextureAttributes();
+
+        texAttr.setTextureMode(TextureAttributes.MODULATE);
+        
+        
+        
+        topApp.setMaterial(mat);
+        topApp.setTexture(texture);
+        topApp.setTextureAttributes(texAttr);
 
       //  Cylinder top = new Cylinder();
         
         
-        Cylinder top = new Cylinder(radius, height, Cylinder.GENERATE_NORMALS, xDivision, yDivision, topApp);
+        Cylinder top = new Cylinder(radius, height, Cylinder.GENERATE_NORMALS+ Cylinder.GENERATE_TEXTURE_COORDS, xDivision, yDivision, topApp);
 
         return top;
         
