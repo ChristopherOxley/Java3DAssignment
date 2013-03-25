@@ -33,12 +33,12 @@ public class Carousel {
 
 
         TransformGroup tg_bottom = new TransformGroup();
-        Cylinder platform = Carousel.createDisc(4, 0.5f);
+        Cylinder platform = Carousel.createDisc(2, 0.3f);
         tg_bottom.addChild(platform);
         carouselTG.addChild(tg_bottom);
         
         TransformGroup tg_top = new TransformGroup();
-        Cylinder roof = Carousel.createDisc(4, 1);
+        Cylinder roof = Carousel.createDisc(2, 0.5f);
         tg_top.addChild(roof);
         carouselTG.addChild(tg_top);
 
@@ -48,7 +48,7 @@ public class Carousel {
         
         Vector3f translate = new Vector3f();
 	Transform3D T3D = new Transform3D();
-	translate.set( 0.0f, 5.0f, 0.0f);
+	translate.set( 0.0f, 2.0f, 0.0f);
         T3D.setTranslation(translate);
 	tg_top.setTransform(T3D);
         

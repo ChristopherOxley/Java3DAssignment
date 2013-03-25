@@ -33,7 +33,7 @@ class ThemePark extends JApplet {
 
         
         // Add a floor
-        TextureLoader loader = new TextureLoader("./src/java3dassignment/grass.jpg", "LUMINANCE", new Container());
+        TextureLoader loader = new TextureLoader("./src/java3dassignment/grass3.jpg", "LUMINANCE", new Container());
         Texture texture = loader.getTexture();
         texture.setBoundaryModeS(Texture.WRAP);
         texture.setBoundaryModeT(Texture.WRAP);
@@ -46,7 +46,7 @@ class ThemePark extends JApplet {
 
 
 
-        Cylinder floor = new Cylinder(200, 0.0000f, Cylinder.GENERATE_NORMALS+ Cylinder.GENERATE_TEXTURE_COORDS, floorAppearance);
+        Cylinder floor = new Cylinder(10, 0.0000f, Cylinder.GENERATE_NORMALS+ Cylinder.GENERATE_TEXTURE_COORDS, floorAppearance);
         floor.setAppearance(floorAppearance);
         
         
