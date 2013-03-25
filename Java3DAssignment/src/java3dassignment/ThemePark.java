@@ -1,3 +1,5 @@
+package java3dassignment;
+
 import java.applet.Applet;
 import java.awt.event.*;
 import com.sun.j3d.utils.applet.MainFrame;
@@ -33,38 +35,10 @@ class ThemePark extends JApplet{
 			// Create a main transofrm group
 			TransformGroup mainTG = new TransformGroup();           
 		
-			// Temp color cube
-			//ColorCube c = new ColorCube(.05f);
-		//	mainTG.addChild(c);
+                        TransformGroup carousel = Carousel.createCarousel();
 			
-			
-			// Create Carousel
-			
-			// Top of carousel
-			float radius = 2.0f;
-			float height = 1.0f;
-			int primFlags = Primitive.ENABLE_APPEARANCE_MODIFY;
-			int xDivision = 10;
-			int yDivision = 10;
-			
-			Appearance topApp = new Appearance();
-			
-			//topApp.setColoringAttributes (new ColoringAttributes (new Color3f (0.0f, 0.0f, 1.0f),1));
-
-			
-			Material mat = new Material();
-			mat.setAmbientColor(new Color3f(0.0f,0.0f,1.0f));
-			mat.setDiffuseColor(new Color3f(0.0f,0.0f,0.7f));
-			mat.setSpecularColor(new Color3f(0.0f,0.0f,0.7f));
-			
-			topApp.setMaterial(mat);
-
-			
-			Cylinder top = new Cylinder(radius, height, primFlags, xDivision, yDivision, topApp);
-			top.setAppearance(topApp);
-			
-			mainTG.addChild(top);
-			
+                        mainTG.addChild(carousel);
+                        
 			return mainTG;		
 		}
 		
