@@ -33,22 +33,20 @@ public class Carousel {
         // Create Carousel
         TransformGroup carouselTG = new TransformGroup();
 
-
+        // Create the bottom of the Carousel
         TransformGroup tg_bottom = new TransformGroup();
         Cylinder platform = Carousel.createDisc(2, 0.3f);
         tg_bottom.addChild(platform);
         carouselTG.addChild(tg_bottom);
         
-        
+        // Create the top of the carousel
         TransformGroup tg_top = new TransformGroup();
         Cylinder roof = Carousel.createDisc(2, 0.5f);
         tg_top.addChild(roof);
         carouselTG.addChild(tg_top);
 
         
-        // Move top up
-        
-        
+        // Move the top up
         Vector3f translate = new Vector3f();
 	Transform3D T3D = new Transform3D();
 	translate.set( 0.0f, 2.0f, 0.0f);
@@ -56,9 +54,11 @@ public class Carousel {
 	tg_top.setTransform(T3D);
         
         
+        // Create the poles & horses
         TransformGroup polesTG = new TransformGroup();
        
-        int numberOfHorses = 16;
+    
+        int numberOfHorses = 20;
         
         for(int i=1; i <= numberOfHorses; i++){
             
@@ -74,7 +74,8 @@ public class Carousel {
                 radius = 1.7f;
             }
             
-            Point2D p = Carousel.calculateNewPoint(0, 0, (float)Math.toRadians(360/numberOfHorses * i), new Point2D.Float(radius, 0f));
+            
+            Point2D p = Carousel.calculateNewPoint((float)Math.toRadians(360/numberOfHorses * i), new Point2D.Float(radius, 0f));
             
             Vector3f translateOut = new Vector3f();
             Transform3D polesT3D = new Transform3D();
@@ -95,47 +96,34 @@ public class Carousel {
     
     private static Cylinder createDisc(float radius, float height){
         
-        
-                // Top of carousel
-
+        // Make sure the cylinder is smooth by increasing the number of faces.
         int xDivision = 10000;
         int yDivision = 1;
 
         
         Appearance topApp = new Appearance();
 
-        //topApp.setColoringAttributes (new ColoringAttributes (new Color3f (0.0f, 0.0f, 1.0f),1));
-
-
+        // Set up the material
         Material mat = new Material();
         mat.setAmbientColor(new Color3f( 255.0f / 255.0f, 215.0f/ 255.0f, 0.0f/ 255.0f));
         mat.setDiffuseColor(new Color3f( 255.0f / 255.0f, 225.0f/ 255.0f, 0.0f/ 255.0f));
         mat.setSpecularColor(new Color3f( 255.0f / 255.0f, 195.0f/ 255.0f, 0.0f/ 255.0f));
 
-        
+        // Set up the texture
         TextureLoader loader = new TextureLoader("./src/java3dassignment/MetallicPaint.jpg", "LUMINANCE", new Container());
-
         Texture texture = loader.getTexture();
-
         texture.setBoundaryModeS(Texture.WRAP);
-
         texture.setBoundaryModeT(Texture.WRAP);
-
-       // texture.setBoundaryColor( new Color4f( 0.0f, 1.0f, 0.0f, 0.0f ) );
-        
         TextureAttributes texAttr = new TextureAttributes();
-
         texAttr.setTextureMode(TextureAttributes.MODULATE);
         
         
-        
+        // Update the appearance with the material and texture
         topApp.setMaterial(mat);
         topApp.setTexture(texture);
         topApp.setTextureAttributes(texAttr);
-
-      //  Cylinder top = new Cylinder();
         
-        
+        // Create a cylinder with the specified attributes.
         Cylinder top = new Cylinder(radius, height, Cylinder.GENERATE_NORMALS+ Cylinder.GENERATE_TEXTURE_COORDS, xDivision, yDivision, topApp);
 
         return top;
@@ -143,36 +131,14 @@ public class Carousel {
     }
     
     
-    public static Point2D calculateNewPoint(float cx, float cy, float angle, Point2D p){
+    public static Point2D calculateNewPoint(float angle, Point2D p){
         
-        
-        try{
-        
-        double s = Math.sin(angle);
-        double c = Math.cos(angle);
+        //calculate new positions by "rotating" the point
+        double newX = p.getX() * Math.cos(angle) - p.getY() * Math.sin(angle);
+        double newY = p.getX() * Math.sin(angle) + p.getY() * Math.cos(angle);
 
-        // translate point back to origin:
-
-        p.setLocation(p.getX() - cx, p.getY() - cy); 
-        
-  
-
-        // rotate point
-        double xnew = p.getX() * c - p.getY() * s;
-        double ynew = p.getX() * s + p.getY() * c;
-
-        // translate point back:
-        p.setLocation(xnew, ynew);
-        }catch(Exception e){
-            
-        }
-        
-
-
-        
-        
+        p.setLocation(newX, newY);
         return p;
-        
     }
     
     
