@@ -57,16 +57,19 @@ public class Carousel {
         // Create the poles & horses
         TransformGroup polesTG = new TransformGroup();
        
-    
+        // Dynamically set the number of horses required on the carousel
         int numberOfHorses = 20;
         
         for(int i=1; i <= numberOfHorses; i++){
             
+            // Create a thin and tall pole
             TransformGroup poleTG = new TransformGroup();
             Cylinder pole = createDisc(0.02f, 2);
             poleTG.addChild(pole);
             polesTG.addChild(poleTG);
             
+            
+            // Every other horse in stepped inwards towards the center
             float radius;
             if(i%2==0){
                 radius = 1.4f;
@@ -74,15 +77,18 @@ public class Carousel {
                 radius = 1.7f;
             }
             
-            
+            // Evenly space the poles out by.
             Point2D p = Carousel.calculateNewPoint((float)Math.toRadians(360/numberOfHorses * i), new Point2D.Float(radius, 0f));
             
+            // Set the new point relative to the center of the carousel & raise
+            // the pole up by half it's height
             Vector3f translateOut = new Vector3f();
             Transform3D polesT3D = new Transform3D();
             translateOut.set( (float)p.getX(), 1.0f, (float)p.getY());
             polesT3D.setTranslation(translateOut);
             poleTG.setTransform(polesT3D);
-            
+      
+            // Create and add a horse to the pole
             poleTG.addChild(Horse.createHorse());
             
         }
