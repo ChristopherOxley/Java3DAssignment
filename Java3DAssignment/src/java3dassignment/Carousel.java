@@ -8,6 +8,8 @@ import com.sun.j3d.utils.geometry.Cylinder;
 import com.sun.j3d.utils.geometry.Primitive;
 import com.sun.j3d.utils.image.TextureLoader;
 import java.awt.Container;
+import java.awt.Point;
+import java.awt.geom.Point2D;
 import javax.media.j3d.Appearance;
 import javax.media.j3d.Material;
 import javax.media.j3d.Texture;
@@ -37,6 +39,7 @@ public class Carousel {
         tg_bottom.addChild(platform);
         carouselTG.addChild(tg_bottom);
         
+        
         TransformGroup tg_top = new TransformGroup();
         Cylinder roof = Carousel.createDisc(2, 0.5f);
         tg_top.addChild(roof);
@@ -52,16 +55,42 @@ public class Carousel {
         T3D.setTranslation(translate);
 	tg_top.setTransform(T3D);
         
+        
+        TransformGroup polesTG = new TransformGroup();
        
+        int numberOfHorses = 16;
         
+        for(int i=1; i <= numberOfHorses; i++){
+            
+            TransformGroup poleTG = new TransformGroup();
+            Cylinder pole = createDisc(0.02f, 2);
+            poleTG.addChild(pole);
+            polesTG.addChild(poleTG);
+            
+            float radius;
+            if(i%2==0){
+                radius = 1.4f;
+            }else{
+                radius = 1.7f;
+            }
+            
+            Point2D p = Carousel.calculateNewPoint(0, 0, (float)Math.toRadians(360/numberOfHorses * i), new Point2D.Float(radius, 0f));
+            
+            Vector3f translateOut = new Vector3f();
+            Transform3D polesT3D = new Transform3D();
+            translateOut.set( (float)p.getX(), 1.0f, (float)p.getY());
+            polesT3D.setTranslation(translateOut);
+            poleTG.setTransform(polesT3D);
+            
+            poleTG.addChild(Horse.createHorse());
+            
+        }
         
-        
-        
-        
-        
+        carouselTG.addChild(polesTG);
         
         return carouselTG;
     }
+    
     
     
     private static Cylinder createDisc(float radius, float height){
@@ -112,5 +141,41 @@ public class Carousel {
         return top;
         
     }
+    
+    
+    public static Point2D calculateNewPoint(float cx, float cy, float angle, Point2D p){
+        
+        
+        try{
+        
+        double s = Math.sin(angle);
+        double c = Math.cos(angle);
+
+        // translate point back to origin:
+
+        p.setLocation(p.getX() - cx, p.getY() - cy); 
+        
+  
+
+        // rotate point
+        double xnew = p.getX() * c - p.getY() * s;
+        double ynew = p.getX() * s + p.getY() * c;
+
+        // translate point back:
+        p.setLocation(xnew, ynew);
+        }catch(Exception e){
+            
+        }
+        
+
+
+        
+        
+        return p;
+        
+    }
+    
+    
+    
     
 }

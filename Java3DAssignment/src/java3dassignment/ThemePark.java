@@ -33,6 +33,11 @@ class ThemePark extends JApplet {
 
         
         // Add a floor
+        Material grassMaterial = new Material();
+        grassMaterial.setAmbientColor(new Color3f( 0.0f / 255.0f, 200.0f/ 255.0f, 0.0f/ 255.0f));
+        grassMaterial.setDiffuseColor(new Color3f( 0.0f / 255.0f, 225.0f/ 255.0f, 0.0f/ 255.0f));
+        grassMaterial.setSpecularColor(new Color3f( 0.0f / 255.0f, 195.0f/ 255.0f, 0.0f/ 255.0f));
+        
         TextureLoader loader = new TextureLoader("./src/java3dassignment/grass3.jpg", "LUMINANCE", new Container());
         Texture texture = loader.getTexture();
         texture.setBoundaryModeS(Texture.WRAP);
@@ -40,6 +45,7 @@ class ThemePark extends JApplet {
         TextureAttributes texAttr = new TextureAttributes();
         texAttr.setTextureMode(TextureAttributes.MODULATE);
         Appearance floorAppearance = new Appearance();
+        floorAppearance.setMaterial(grassMaterial);
         floorAppearance.setTexture(texture);
         floorAppearance.setTextureAttributes(texAttr);
         
