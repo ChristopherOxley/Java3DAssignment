@@ -90,6 +90,11 @@ public class Carousel {
       
             // Create and add a horse to the pole
             poleTG.addChild(Horse.createHorse());
+         
+            //TODO: Rotate the horse
+            
+            //TODO: move the horse down to a random position
+            
             
         }
         
