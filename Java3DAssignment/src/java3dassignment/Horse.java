@@ -10,6 +10,7 @@ import com.sun.j3d.utils.image.TextureLoader;
 import java.awt.Container;
 import javax.media.j3d.*;
 import javax.vecmath.Color3f;
+import javax.vecmath.Vector3f;
 
 /**
  *
@@ -18,17 +19,18 @@ import javax.vecmath.Color3f;
 public class Horse {
     
     
-    public static TransformGroup createHorse(){
+    public static TransformGroup createHorse( ){
+
         
         // Create Horse
         TransformGroup horseTG = new TransformGroup();
 
         Box body = new Box(0.3f, 0.15f, 0.1f, new Appearance());
-
+        body.setAppearance(Horse.horseColor());
         horseTG.addChild(body);
         
         Box legFL = new Box(0.02f, 0.5f, 0.02f, new Appearance());
-        legFL.setAppearance(Horse.getWoodTexture());
+        legFL.setAppearance(Horse.horseColor());
         horseTG.addChild(legFL);
         
         
@@ -38,36 +40,29 @@ public class Horse {
         // Box neck = new Box(0.3f, 0.15f, 0.1f, new Appearance());
         // Box head = new Box(0.3f, 0.15f, 0.1f, new Appearance());
   
+        
+                
+
+        
+        
         return horseTG;
         
     }
     
     
-     public static Appearance getWoodTexture(){
+     public static Appearance horseColor(){
     
-        Appearance app = new Appearance();
 
-        // Set up the material
-        Material mat = new Material();
-        mat.setAmbientColor(new Color3f( 255.0f / 255.0f, 215.0f/ 255.0f, 0.0f/ 255.0f));
-        mat.setDiffuseColor(new Color3f( 255.0f / 255.0f, 225.0f/ 255.0f, 0.0f/ 255.0f));
-        mat.setSpecularColor(new Color3f( 255.0f / 255.0f, 195.0f/ 255.0f, 0.0f/ 255.0f));
-
-        // Set up the texture
-        TextureLoader loader = new TextureLoader("./src/java3dassignment/wood.jpg", "LUMINANCE", new Container());
-        Texture texture = loader.getTexture();
-        texture.setBoundaryModeS(Texture.WRAP);
-        texture.setBoundaryModeT(Texture.WRAP);
-        TextureAttributes texAttr = new TextureAttributes();
-        texAttr.setTextureMode(TextureAttributes.MODULATE);
+        // Add a floor
+        Material grassMaterial = new Material();
+        grassMaterial.setAmbientColor(new Color3f( 200.0f / 255.0f, 200.0f/ 255.0f, 200.0f/ 255.0f));
+        grassMaterial.setDiffuseColor(new Color3f( 200.0f / 255.0f, 200.0f/ 255.0f, 200.0f/ 255.0f));
+        grassMaterial.setSpecularColor(new Color3f( 200.0f / 255.0f, 200.0f/ 255.0f, 200.0f/ 255.0f));
         
         
-        // Update the appearance with the material and texture
-        app.setMaterial(mat);
-        app.setTexture(texture);
-        app.setTextureAttributes(texAttr);
-        
-        return app;
+        Appearance floorAppearance = new Appearance();
+        floorAppearance.setMaterial(grassMaterial);
+        return floorAppearance;
         
     }
     
