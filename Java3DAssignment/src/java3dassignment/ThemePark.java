@@ -71,9 +71,9 @@ class ThemePark extends JApplet {
         BranchGroup objRoot = new BranchGroup();
 
         // Set up the global lights
-        Color3f lColor1 = new Color3f(0.9f, 0.9f, 0.6f);
+        Color3f lColor1 = new Color3f(0.9f, 0.9f, 0.9f);
         Vector3f lDir1 = new Vector3f(-1.0f, -1.0f, -1.0f);
-        Color3f alColor = new Color3f(0.9f, 0.9f, 0.6f);
+        Color3f alColor = new Color3f(1.0f, 1.0f, 1.0f);
 
 
         AmbientLight aLgt = new AmbientLight(alColor);
@@ -82,6 +82,25 @@ class ThemePark extends JApplet {
         lgt1.setInfluencingBounds(bounds);
         objRoot.addChild(aLgt);
         objRoot.addChild(lgt1);
+        
+ 
+
+        SpotLight spotLight = new SpotLight();
+        spotLight.setEnable(true);
+        spotLight.setSpreadAngle((float)Math.toRadians(45));
+        spotLight.setColor(new Color3f(0.0f, 1.0f, 0.0f));
+        spotLight.setPosition(new Point3f(0.0f, 1.0f, 3.0f));
+        spotLight.setAttenuation(new Point3f(0.1f, 0.0f, 0.0f));
+        spotLight.setDirection(new Vector3f(0.0f, 0.0f, -1.0f));
+        spotLight.setConcentration(50.0f);
+        spotLight.setInfluencingBounds(bounds);
+        objRoot.addChild(spotLight);
+
+
+     
+
+
+
 
         // adding the TG of the picture to the universe
         objRoot.addChild(createPicture());

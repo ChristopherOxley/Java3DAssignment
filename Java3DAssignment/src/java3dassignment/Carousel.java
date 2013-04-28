@@ -54,7 +54,7 @@ public class Carousel {
         TransformGroup polesTG = new TransformGroup();
 
         // Dynamically set the number of horses required on the carousel
-        int numberOfHorses = 20;
+        int numberOfHorses = 18;
 
         for (int i = 1; i <= numberOfHorses; i++) {
 
@@ -75,7 +75,7 @@ public class Carousel {
             if (i % 2 == 0) {
                 radius = 1.4f;
             } else {
-                radius = 1.7f;
+                radius = 1.9f;
             }
 
             
