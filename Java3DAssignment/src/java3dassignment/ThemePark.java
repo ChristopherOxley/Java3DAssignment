@@ -59,9 +59,10 @@ class ThemePark extends JApplet {
         mainTG.addChild(floor);
         
         
-        
+        // Return Transform Group
         mainTG.addChild(carousel);
 
+        
         return mainTG;
     }
 

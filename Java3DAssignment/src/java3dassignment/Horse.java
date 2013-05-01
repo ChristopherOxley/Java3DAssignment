@@ -16,15 +16,18 @@ import javax.vecmath.Vector3f;
  *
  * @author chrisoxley
  */
+
+
+// Basic class to create a simple horse made of boxes of different shapes, sizes, positions and orientations.
 public class Horse {
-    
-    
     public static TransformGroup createHorse( ){
 
         
         // Create Horse
         TransformGroup horseTG = new TransformGroup();
 
+        
+        // Create a standard box for the body
         Box body = new Box(0.3f, 0.15f, 0.1f, new Appearance());
         body.setAppearance(Horse.horseColor());
         horseTG.addChild(body);
@@ -97,15 +100,15 @@ public class Horse {
      public static Appearance horseColor(){
     
         // Add a floor
-        Material grassMaterial = new Material();
-        grassMaterial.setAmbientColor(new Color3f( 194.0f / 255.0f, 178.0f/ 255.0f, 128.0f/ 255.0f));
-        grassMaterial.setDiffuseColor(new Color3f( 194.0f / 255.0f, 178.0f/ 255.0f, 128.0f/ 255.0f));
-        grassMaterial.setSpecularColor(new Color3f( 194.0f / 255.0f, 178.0f/ 255.0f, 128.0f/ 255.0f));
+        Material mat = new Material();
+        mat.setAmbientColor(new Color3f( 194.0f / 255.0f, 178.0f/ 255.0f, 128.0f/ 255.0f));
+        mat.setDiffuseColor(new Color3f( 194.0f / 255.0f, 178.0f/ 255.0f, 128.0f/ 255.0f));
+        mat.setSpecularColor(new Color3f( 194.0f / 255.0f, 178.0f/ 255.0f, 128.0f/ 255.0f));
         
         
-        Appearance floorAppearance = new Appearance();
-        floorAppearance.setMaterial(grassMaterial);
-        return floorAppearance;
+        Appearance app = new Appearance();
+        app.setMaterial(mat);
+        return app;
         
     }
     

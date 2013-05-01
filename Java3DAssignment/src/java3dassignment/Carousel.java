@@ -7,15 +7,12 @@ package java3dassignment;
 import com.sun.j3d.utils.geometry.Cylinder;
 import com.sun.j3d.utils.geometry.Primitive;
 import com.sun.j3d.utils.image.TextureLoader;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Point;
 import java.awt.geom.Point2D;
-import javax.media.j3d.Appearance;
-import javax.media.j3d.Material;
-import javax.media.j3d.Texture;
-import javax.media.j3d.TextureAttributes;
-import javax.media.j3d.Transform3D;
-import javax.media.j3d.TransformGroup;
+import java.util.Random;
+import javax.media.j3d.*;
 import javax.vecmath.*;
 
 /**
@@ -65,7 +62,9 @@ public class Carousel {
             polesTG.addChild(poleTG);
             
                         // Create and add a horse to the pole
-            poleTG.addChild(Horse.createHorse());
+            
+            TransformGroup horseTG =  Horse.createHorse();
+            poleTG.addChild(horseTG);
 
       
             
@@ -107,15 +106,37 @@ public class Carousel {
 
 
             //TODO: move the horse down to a random position
-
+            
+            Vector3f translateVeritcal = new Vector3f();
+            Transform3D horseTG3D = new Transform3D();
+            
+            // Random number between -0.5 and 0.5
+            Random randomNumber = new Random();
+            float rn = randomNumber.nextFloat()  - 0.5f;
+            
+            translateVeritcal.set(0, rn, 0);
+            horseTG3D.setTranslation(translateVeritcal);
+            horseTG.setTransform(horseTG3D);
 
         }
 
         carouselTG.addChild(polesTG);
 
+        
+        TransformGroup capTG = Carousel.carouselCap(1.5f, 1.5f, 6);
+        carouselTG.addChild(capTG);
+        Vector3f translateUp = new Vector3f();
+        Transform3D capT3D = new Transform3D();
+        translateUp.set(0.0f, 2.2f,0.0f);
+  
+        capT3D.setTranslation(translateUp);
+        capTG.setTransform(capT3D);
+        
         return carouselTG;
     }
 
+    
+    // Conveniance method for creating a cylinder
     private static Cylinder createDisc(float radius, float height) {
 
         // Make sure the cylinder is smooth by increasing the number of faces.
@@ -146,19 +167,100 @@ public class Carousel {
         topApp.setTextureAttributes(texAttr);
 
         // Create a cylinder with the specified attributes.
-        Cylinder top = new Cylinder(radius, height, Cylinder.GENERATE_NORMALS + Cylinder.GENERATE_TEXTURE_COORDS, xDivision, yDivision, topApp);
+        Cylinder cyl = new Cylinder(radius, height, Cylinder.GENERATE_NORMALS + Cylinder.GENERATE_TEXTURE_COORDS, xDivision, yDivision, topApp);
 
-        return top;
+        return cyl;
 
     }
 
+    // Used to calculate the new position for a given angle around the origin.
     public static Point2D calculateNewPoint(float angle, Point2D p) {
 
         //calculate new positions by "rotating" the point
         double newX = p.getX() * Math.cos(angle) - p.getY() * Math.sin(angle);
         double newY = p.getX() * Math.sin(angle) + p.getY() * Math.cos(angle);
-
         p.setLocation(newX, newY);
+
         return p;
     }
+    
+    //CUSTOM SHAPE Method to create a pyramid (increase sides to create a cone.)
+    public static TransformGroup carouselCap(float radius, float height, int sides){
+        
+        
+        TransformGroup capTG = new TransformGroup();
+
+
+        
+        // size = number of sides to the cap * number of verticies per side * 2
+        Point3f[] vertices = new Point3f[sides * 3 * 2];
+        
+        for(int i = 0; i < vertices.length/3/2; i++){
+            
+             float angle1 = (float)Math.toRadians(360.0f / sides * i) ;
+             float angle2 = (float)Math.toRadians(360.0f / sides * (i+1));
+
+            // Base Triangles
+            
+            Point2D base2d1 = Carousel.calculateNewPoint(angle1, new Point2D.Float(radius, 0f));
+            Point2D base2d2 = Carousel.calculateNewPoint(angle2, new Point2D.Float(radius, 0f));
+            
+            Point3f base3f1 = new Point3f(0.0f, 0.0f, 0.0f);
+            Point3f base3f2 = new Point3f((float)base2d1.getX(),0.0f, (float)base2d1.getY());
+            Point3f base3f3 = new Point3f((float)base2d2.getX(),0.0f, (float)base2d2.getY());
+            
+            // Order important to ensure visability
+            vertices[i * 3 * 2 + 0] = base3f1;
+            vertices[i * 3 * 2 + 1] = base3f2;
+            vertices[i * 3 * 2 + 2] = base3f3;
+
+            
+            // Taper Triangles
+            
+            Point3f taper3f1 = new Point3f(0.0f, height, 0.0f);
+            Point3f taper3f2 = new Point3f((float)base2d1.getX(),0.0f, (float)base2d1.getY());
+            Point3f taper3f3 = new Point3f((float)base2d2.getX(),0.0f, (float)base2d2.getY());
+            
+            // Order important to ensure visability
+            vertices[i * 3 * 2 + 3] = taper3f3;
+            vertices[i * 3 * 2 + 4] = taper3f2;
+            vertices[i * 3 * 2 + 5] = taper3f1;
+
+            
+            
+        }
+        
+        
+        TriangleArray array = new TriangleArray(vertices.length, TriangleArray.COORDINATES | TriangleArray.NORMALS | TriangleArray.TEXTURE_COORDINATE_2);
+        array.setCoordinates(0, vertices);
+        array.setTextureCoordinates(0, vertices);
+
+        
+          // Add a floor
+        Material mat = new Material();
+        mat.setAmbientColor(new Color3f(128.0f / 255.0f, 0.0f / 255.0f, 128.0f / 255.0f));
+        mat.setDiffuseColor(new Color3f(150.0f / 255.0f, 0.0f / 255.0f, 50.0f / 255.0f));
+        mat.setSpecularColor(new Color3f(90.0f / 255.0f, 0.0f / 255.0f, 90.0f / 255.0f));
+        
+        TextureLoader loader = new TextureLoader("./src/java3dassignment/MetallicPaint.jpg", "LUMINANCE", new Container());
+        Texture texture = loader.getTexture();
+        texture.setBoundaryModeS(Texture.WRAP);
+        texture.setBoundaryModeT(Texture.WRAP);
+        TextureAttributes texAttr = new TextureAttributes();
+        texAttr.setTextureMode(TextureAttributes.MODULATE);
+        Appearance floorAppearance = new Appearance();
+        floorAppearance.setMaterial(mat);
+        floorAppearance.setTexture(texture);
+        floorAppearance.setTextureAttributes(texAttr);
+        
+        
+        Shape3D myShape = new Shape3D(array, floorAppearance);
+
+        capTG.addChild(myShape);
+
+        
+        return capTG;
+    }
+    
+    
 }
