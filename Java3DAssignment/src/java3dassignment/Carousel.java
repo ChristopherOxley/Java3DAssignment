@@ -21,7 +21,7 @@ import javax.vecmath.*;
  */
 public class Carousel {
 
-    public static TransformGroup createCarousel() {
+    public static TransformGroup createCarousel(Bounds bounds) {
 
         // Create Carousel
         TransformGroup carouselTG = new TransformGroup();
@@ -117,7 +117,33 @@ public class Carousel {
             translateVeritcal.set(0, rn, 0);
             horseTG3D.setTranslation(translateVeritcal);
             horseTG.setTransform(horseTG3D);
+            
+            // add vertical motion trasforms
 
+            horseTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+            
+            
+
+            
+            Alpha alpha = new Alpha(-1,  Alpha.INCREASING_ENABLE | Alpha.DECREASING_ENABLE , 0, 0,4000, 0, 0, 4000, 0, 0);
+            PositionInterpolator pi = new PositionInterpolator(alpha, horseTG);
+            horseTG3D.rotZ(Math.PI/2.0f);
+            
+             Vector3f animateTrans = new Vector3f();
+            Transform3D anim3D = new Transform3D();
+            
+            animateTrans.set(0, rn, 0);
+            horseTG3D.setTranslation(animateTrans);
+            horseTG.setTransform(anim3D);
+            
+            pi.setStartPosition(rn);
+            pi.setEndPosition(-rn);
+           pi.setTransformAxis(horseTG3D);
+                   
+                
+           pi.setSchedulingBounds(bounds);
+            
+            horseTG.addChild(pi);
         }
 
         carouselTG.addChild(polesTG);

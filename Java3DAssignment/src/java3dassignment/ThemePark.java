@@ -29,7 +29,7 @@ class ThemePark extends JApplet {
         // Create a main transofrm group
         TransformGroup mainTG = new TransformGroup();
 
-        TransformGroup carousel = Carousel.createCarousel();
+        TransformGroup carousel = Carousel.createCarousel(bounds);
 
         
         // Add a floor
