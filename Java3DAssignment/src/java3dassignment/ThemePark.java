@@ -17,6 +17,7 @@ import com.sun.j3d.utils.image.TextureLoader;
 import java.net.*;
 import com.sun.j3d.loaders.objectfile.ObjectFile;
 import com.sun.j3d.loaders.*;
+import java.util.Random;
 
 class ThemePark extends JApplet {
 
@@ -32,13 +33,13 @@ class ThemePark extends JApplet {
         // Set the number of horses
         TransformGroup carousel = Carousel.createCarousel(18, bounds);
 
-        
+
         // Add a floor
         Material grassMaterial = new Material();
-        grassMaterial.setAmbientColor(new Color3f( 0.0f / 255.0f, 200.0f/ 255.0f, 0.0f/ 255.0f));
-        grassMaterial.setDiffuseColor(new Color3f( 0.0f / 255.0f, 225.0f/ 255.0f, 0.0f/ 255.0f));
-        grassMaterial.setSpecularColor(new Color3f( 0.0f / 255.0f, 195.0f/ 255.0f, 0.0f/ 255.0f));
-        
+        grassMaterial.setAmbientColor(new Color3f(0.0f / 255.0f, 200.0f / 255.0f, 0.0f / 255.0f));
+        grassMaterial.setDiffuseColor(new Color3f(0.0f / 255.0f, 225.0f / 255.0f, 0.0f / 255.0f));
+        grassMaterial.setSpecularColor(new Color3f(0.0f / 255.0f, 195.0f / 255.0f, 0.0f / 255.0f));
+
         TextureLoader loader = new TextureLoader("./src/java3dassignment/grass3.jpg", "LUMINANCE", new Container());
         Texture texture = loader.getTexture();
         texture.setBoundaryModeS(Texture.WRAP);
@@ -49,38 +50,96 @@ class ThemePark extends JApplet {
         floorAppearance.setMaterial(grassMaterial);
         floorAppearance.setTexture(texture);
         floorAppearance.setTextureAttributes(texAttr);
-        
 
 
 
-        Cylinder floor = new Cylinder(10, 0.0000f, Cylinder.GENERATE_NORMALS+ Cylinder.GENERATE_TEXTURE_COORDS, floorAppearance);
+
+        Cylinder floor = new Cylinder(10, 0.0000f, Cylinder.GENERATE_NORMALS + Cylinder.GENERATE_TEXTURE_COORDS, floorAppearance);
         floor.setAppearance(floorAppearance);
-        
-        
+
+
         mainTG.addChild(floor);
-        
+
         // Repeat every 10 seconds
         Transform3D rot3D = new Transform3D();
         Alpha rotationAlpha = new Alpha(-1, Alpha.DECREASING_ENABLE,
-                                        0, 0,
-                                        0, 0, 0,
-                                        10000, 0, 0);
-	//t.rotX(2* Math.PI /4); 
-        
+                0, 0,
+                0, 0, 0,
+                10000, 0, 0);
+        //t.rotX(2* Math.PI /4); 
+
         carousel.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-	RotationInterpolator rotator = new RotationInterpolator(rotationAlpha, carousel, rot3D, 0.0f, (float) Math.PI*2.0f);
-	rotator.setSchedulingBounds(bounds);
-        
+        RotationInterpolator rotator = new RotationInterpolator(rotationAlpha, carousel, rot3D, 0.0f, (float) Math.PI * 2.0f);
+        rotator.setSchedulingBounds(bounds);
+
         mainTG.addChild(rotator);
         // Return Transform Group
         mainTG.addChild(carousel);
-        
-        
-        
-        
-        
+
+
+        // create a ball for collision detection
+        TransformGroup ballTG = new TransformGroup();
+        Transform3D translateBall = new Transform3D();
+        translateBall.setTranslation(new Vector3f(5.0f, 0.5f, 0.0f));
+        Sphere ball = new Sphere(0.25f);
+        ballTG.addChild(ball);
+        mainTG.addChild(ballTG);
+        ballTG.setTransform(translateBall);
+
+
+
+        // Move the ball
+        ballTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+
+
+        Vector3f translateVeritcal = new Vector3f();
+        Transform3D ballTG3D = new Transform3D();
+
+
+        ballTG3D.setTranslation(translateVeritcal);
+        ballTG.setTransform(ballTG3D);
+
+        // add vertical motion trasform to the bl
+
+        ballTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+
+
+
+
+        Alpha alpha = new Alpha(-1, Alpha.INCREASING_ENABLE | Alpha.DECREASING_ENABLE, 0, 0, 4000, 0, 0, 4000, 0, 0);
+        PositionInterpolator pi = new PositionInterpolator(alpha, ballTG);
+        ballTG3D.rotZ(Math.PI / 2.0f);
+
+        Vector3f animateTrans = new Vector3f();
+        Transform3D anim3D = new Transform3D();
+
+        animateTrans.set(0, 10, 0);
+        ballTG3D.setTranslation(animateTrans);
+        ballTG.setTransform(anim3D);
+
+        pi.setStartPosition(5);
+        pi.setEndPosition(-1);
+        pi.setTransformAxis(ballTG3D);
+
+
+        pi.setSchedulingBounds(bounds);
+
+        ballTG.addChild(pi);
+
 
         
+
+        ball.setCapability(ball.ENABLE_APPEARANCE_MODIFY);
+
+        
+        // Add collision detection to the ball
+        CollisionBehavior coll = new CollisionBehavior(ball);
+        coll.setSchedulingBounds(bounds);
+        mainTG.addChild(coll);
+
+
+
+
         return mainTG;
     }
 
@@ -101,12 +160,12 @@ class ThemePark extends JApplet {
         lgt1.setInfluencingBounds(bounds);
         objRoot.addChild(aLgt);
         objRoot.addChild(lgt1);
-        
- 
+
+
 
         SpotLight spotLight = new SpotLight();
         spotLight.setEnable(true);
-        spotLight.setSpreadAngle((float)Math.toRadians(45));
+        spotLight.setSpreadAngle((float) Math.toRadians(45));
         spotLight.setColor(new Color3f(0.0f, 1.0f, 0.0f));
         spotLight.setPosition(new Point3f(0.0f, 1.0f, 3.0f));
         spotLight.setAttenuation(new Point3f(0.1f, 0.0f, 0.0f));
@@ -116,7 +175,7 @@ class ThemePark extends JApplet {
         objRoot.addChild(spotLight);
 
 
-     
+
 
 
 

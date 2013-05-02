@@ -38,6 +38,8 @@ public class Carousel {
         tg_top.addChild(roof);
         carouselTG.addChild(tg_top);
 
+        
+        
 
         // Move the top up
         Vector3f translate = new Vector3f();
@@ -65,6 +67,9 @@ public class Carousel {
             poleTG.addChild(horseTG);
 
       
+
+                   
+            
             
 
             // Every other horse in stepped inwards towards the center
@@ -110,19 +115,16 @@ public class Carousel {
             
             // Random number between -0.5 and 0.5
             Random randomNumber = new Random();
-            float rn = randomNumber.nextFloat()  - 0.5f;
+            float rn = randomNumber.nextFloat()   - 0.5f;
             
             translateVeritcal.set(0, rn, 0);
             horseTG3D.setTranslation(translateVeritcal);
             horseTG.setTransform(horseTG3D);
             
-            // add vertical motion trasforms
+            // add vertical motion trasforms to horses
 
             horseTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-            
-            
 
-            
             Alpha alpha = new Alpha(-1,  Alpha.INCREASING_ENABLE | Alpha.DECREASING_ENABLE , 0, 0,4000, 0, 0, 4000, 0, 0);
             PositionInterpolator pi = new PositionInterpolator(alpha, horseTG);
             horseTG3D.rotZ(Math.PI/2.0f);
@@ -136,12 +138,15 @@ public class Carousel {
             
             pi.setStartPosition(rn);
             pi.setEndPosition(-rn);
-           pi.setTransformAxis(horseTG3D);
+            pi.setTransformAxis(horseTG3D);
                    
                 
-           pi.setSchedulingBounds(bounds);
+            pi.setSchedulingBounds(bounds);
             
             horseTG.addChild(pi);
+            
+
+            
         }
 
         carouselTG.addChild(polesTG);
