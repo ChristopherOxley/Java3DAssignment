@@ -29,7 +29,8 @@ class ThemePark extends JApplet {
         // Create a main transofrm group
         TransformGroup mainTG = new TransformGroup();
 
-        TransformGroup carousel = Carousel.createCarousel(bounds);
+        // Set the number of horses
+        TransformGroup carousel = Carousel.createCarousel(18, bounds);
 
         
         // Add a floor
@@ -58,9 +59,26 @@ class ThemePark extends JApplet {
         
         mainTG.addChild(floor);
         
+        // Repeat every 10 seconds
+        Transform3D rot3D = new Transform3D();
+        Alpha rotationAlpha = new Alpha(-1, Alpha.DECREASING_ENABLE,
+                                        0, 0,
+                                        0, 0, 0,
+                                        10000, 0, 0);
+	//t.rotX(2* Math.PI /4); 
         
+        carousel.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+	RotationInterpolator rotator = new RotationInterpolator(rotationAlpha, carousel, rot3D, 0.0f, (float) Math.PI*2.0f);
+	rotator.setSchedulingBounds(bounds);
+        
+        mainTG.addChild(rotator);
         // Return Transform Group
         mainTG.addChild(carousel);
+        
+        
+        
+        
+        
 
         
         return mainTG;

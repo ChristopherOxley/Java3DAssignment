@@ -21,7 +21,7 @@ import javax.vecmath.*;
  */
 public class Carousel {
 
-    public static TransformGroup createCarousel(Bounds bounds) {
+    public static TransformGroup createCarousel(int numberOfHorses,Bounds bounds) {
 
         // Create Carousel
         TransformGroup carouselTG = new TransformGroup();
@@ -50,8 +50,6 @@ public class Carousel {
         // Create the poles & horses
         TransformGroup polesTG = new TransformGroup();
 
-        // Dynamically set the number of horses required on the carousel
-        int numberOfHorses = 18;
 
         for (int i = 1; i <= numberOfHorses; i++) {
 
